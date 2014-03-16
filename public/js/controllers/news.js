@@ -49,7 +49,7 @@
 
             $scope.find = function() {
                 News.query(function(news) {
-                    $scope.news = newsItems;
+                    $scope.news = news;
                 });
             };
 
