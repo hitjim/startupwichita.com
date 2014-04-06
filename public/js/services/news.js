@@ -5,16 +5,13 @@
     var NewsService = [
         '$resource',
         function($resource) {
-            return $resource('/api/v1/news/:newsId', {
-                id: '@_id'
-            }, {
+            return $resource('/api/v1/news/:id', null, {
                 update: {
                     method: 'PUT'
                 },
                 search: {
                     method: 'GET',
                     isArray: true
-                
                 }
             });
         }

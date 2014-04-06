@@ -69,19 +69,22 @@
 
             it('$scope.findOne() should create an array with one newsItem object fetched ' +
                 'from XHR using a newsId URL parameter', function() {
+                    var newsItemId = '525a8422f6d0f87f0e407a33';
                     // fixture URL parament
-                    $stateParams.newsId = '525a8422f6d0f87f0e407a33';
+                    $stateParams.newsItemId = newsItemId;
 
                     // fixture response object
                     var testNewsData = function() {
                         return {
-                            title: 'An NewsItem about MEAN',
-                            content: 'MEAN rocks!'
+                            id: newsItemId,
+                            title: 'An News item about Start Up Wichita',
+                            content: 'Start Up Wichita rocks!'
                         };
                     };
 
                     // test expected GET request with response object
-                    $httpBackend.expectGET(/news\/([0-9a-fA-F]{24})$/).respond(testNewsData());
+                    $httpBackend.expectGET('/api/v1/news/' + newsItemId)
+                                .respond(testNewsData());
 
                     // run controller
                     scope.findOne();

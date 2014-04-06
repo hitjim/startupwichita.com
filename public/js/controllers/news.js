@@ -55,7 +55,7 @@
 
             $scope.findOne = function() {
                 News.get({
-                    newsItemId: $stateParams.newsItemId
+                    id: $stateParams.newsItemId
                 }, function(newsItem) {
                     $scope.newsItem = newsItem;
                 });
