@@ -50,7 +50,7 @@
                 'fetched from XHR', function() {
 
                     // test expected GET request
-                    $httpBackend.expectGET('news').respond([{
+                    $httpBackend.expectGET('/api/v1/news').respond([{
                         title: 'An NewsItem about MEAN',
                         content: 'MEAN rocks!'
                     }]);
@@ -121,7 +121,7 @@
                     scope.content = 'MEAN rocks!';
 
                     // test post request is sent
-                    $httpBackend.expectPOST('news', postNewsData()).respond(responseNewsData());
+                    $httpBackend.expectPOST('/api/v1/news', postNewsData()).respond(responseNewsData());
 
                     // Run controller
                     scope.create();
@@ -153,7 +153,7 @@
                 scope.newsItem = newsItem;
 
                 // test PUT happens correctly
-                $httpBackend.expectPUT(/news\/([0-9a-fA-F]{24})$/).respond();
+                $httpBackend.expectPUT(/api\/v1\/news\/([0-9a-fA-F]{24})$/).respond();
 
                 // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
                 //$httpBackend.expectPUT(/news\/([0-9a-fA-F]{24})$/, putNewsData()).respond();
