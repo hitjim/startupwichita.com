@@ -140,7 +140,7 @@
                 // fixture rideshare
                 var putNewsData = function() {
                     return {
-                        _id: '525a8422f6d0f87f0e407a33',
+                        id: '525a8422f6d0f87f0e407a33',
                         title: 'An NewsItem about MEAN',
                         to: 'MEAN is great!'
                     };
@@ -153,7 +153,7 @@
                 scope.newsItem = newsItem;
 
                 // test PUT happens correctly
-                $httpBackend.expectPUT('/api/v1/news/' + scope.newsItem._id).respond();
+                $httpBackend.expectPUT('/api/v1/news/' + scope.newsItem.id).respond();
 
                 // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
                 //$httpBackend.expectPUT(/news\/([0-9a-fA-F]{24})$/, putNewsData()).respond();
@@ -168,7 +168,7 @@
                 $httpBackend.flush();
 
                 // test URL location to new object
-                expect($location.path()).toBe('/news/' + putNewsData()._id);
+                expect($location.path()).toBe('/news/' + putNewsData().id);
 
             }));
 

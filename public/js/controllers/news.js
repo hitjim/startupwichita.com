@@ -43,7 +43,7 @@
                 newsItem.updated.push(new Date().getTime());
 
                 newsItem.$update(function() {
-                    $location.path('news/' + newsItem._id);
+                    $location.path('news/' + newsItem.id);
                 });
             };
 
