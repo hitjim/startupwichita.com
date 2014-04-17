@@ -7,21 +7,22 @@
         beforeEach(module('startupwichita'));
 
         describe('newsService', function () {
-            it ('should issue PUT request to /api/v1/tags1', inject(function(News, $httpBackend) {
-                var updateNews,
+            it ('should issue PUT request to /api/v1/news/:id', inject(function(News, $httpBackend) {
+                var newsItemId = '507f1f77bcf86cd799439011',
+                    updateNews,
                     updateTimestamp = Date.now();
 
-                $httpBackend.when('PUT', '/api/v1/news').respond({id: '507f1f77bcf86cd799439011', name: 'News 1', updated: updateTimestamp});
+                $httpBackend.expectPUT('/api/v1/news/' + newsItemId).respond({id: newsItemId, name: 'News 1', updated: updateTimestamp});
 
                 updateNews = new News({
-                    id: '507f1f77bcf86cd799439011',
+                    id: newsItemId,
                     name: 'News 1'
                 });
 
                 updateNews.$update();
 
                 $httpBackend.flush();
-                expect(updateNews.id).toEqual('507f1f77bcf86cd799439011');
+                expect(updateNews.id).toEqual(newsItemId);
                 expect(updateNews.name).toEqual('News 1');
                 expect(updateNews.updated).toEqual(updateTimestamp);
             }));

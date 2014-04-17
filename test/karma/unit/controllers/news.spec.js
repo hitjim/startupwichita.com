@@ -110,7 +110,7 @@
                     // fixture expected response data
                     var responseNewsData = function() {
                         return {
-                            _id: '525cf20451979dea2c000001',
+                            id: '525cf20451979dea2c000001',
                             title: 'An NewsItem about MEAN',
                             content: 'MEAN rocks!'
                         };
@@ -136,13 +136,14 @@
                 });
 
             it('$scope.update() should update a valid newsItem', inject(function(News) {
+                var newsItemId = '525a8422f6d0f87f0e407a33';
 
-                // fixture rideshare
+                // fixture news item
                 var putNewsData = function() {
                     return {
-                        id: '525a8422f6d0f87f0e407a33',
-                        title: 'An NewsItem about MEAN',
-                        to: 'MEAN is great!'
+                        id: newsItemId,
+                        title: 'An NewsItem about Start Up Wichita',
+                        to: 'Start Up Wichita is great!'
                     };
                 };
 
@@ -153,15 +154,7 @@
                 scope.newsItem = newsItem;
 
                 // test PUT happens correctly
-                $httpBackend.expectPUT('/api/v1/news/' + scope.newsItem.id).respond();
-
-                // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
-                //$httpBackend.expectPUT(/news\/([0-9a-fA-F]{24})$/, putNewsData()).respond();
-                /*
-                Error: Expected PUT /news\/([0-9a-fA-F]{24})$/ with different data
-                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An NewsItem about MEAN","to":"MEAN is great!"}
-                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An NewsItem about MEAN","to":"MEAN is great!","updated":[1383534772975]}
-                */
+                $httpBackend.expectPUT('/api/v1/news/' + newsItemId).respond();
 
                 // run controller
                 scope.update();
@@ -172,20 +165,21 @@
 
             }));
 
-            it('$scope.remove() should send a DELETE request with a valid newsId' +
+            it('$scope.remove() should send a DELETE request with a valid id' +
                 'and remove the newsItem from the scope', inject(function(News) {
+                    var newsItemId = '525a8422f6d0f87f0e407a33';
 
-                    // fixture rideshare
+                    // fixture news item
                     var newsItem = new News({
-                        _id: '525a8422f6d0f87f0e407a33'
+                        id: newsItemId
                     });
 
-                    // mock rideshares in scope
+                    // mock news items in scope
                     scope.news = [];
                     scope.news.push(newsItem);
 
-                    // test expected rideshare DELETE request
-                    $httpBackend.expectDELETE(/news\/([0-9a-fA-F]{24})$/).respond(204);
+                    // test expected news item DELETE request
+                    $httpBackend.expectDELETE('/api/v1/news/' + newsItemId).respond(204);
 
                     // run controller
                     scope.remove(newsItem);
