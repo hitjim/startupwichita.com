@@ -153,7 +153,7 @@
                 scope.newsItem = newsItem;
 
                 // test PUT happens correctly
-                $httpBackend.expectPUT(/api\/v1\/news\/([0-9a-fA-F]{24})$/).respond();
+                $httpBackend.expectPUT('/api/v1/news/' + scope.newsItem._id).respond();
 
                 // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
                 //$httpBackend.expectPUT(/news\/([0-9a-fA-F]{24})$/, putNewsData()).respond();
