@@ -5,6 +5,7 @@ var should = require('should'),
     mongoose = require('mongoose'),
     request = require('supertest'),
     agent = request.agent(app),
+    MD5 = require('crypto-js/md5'),
     User = mongoose.model('User');
 
 describe('User routing', function() {
@@ -34,6 +35,7 @@ describe('User routing', function() {
             should.exist(res.body.user.name);
             should.exist(res.body.user.bio);
             should.exist(res.body.user.tagline);
+            should.exist(res.body.user.emailHash);
             should.exist(res.body.user.role);
             should.exist(res.body.user.featured);
 
@@ -128,6 +130,7 @@ describe('User routing', function() {
                 should.exist(res.body.name);
                 should.exist(res.body.bio);
                 should.exist(res.body.tagline);
+                should.exist(res.body.emailHash);
                 should.exist(res.body.role);
                 should.exist(res.body.featured);
 
@@ -190,7 +193,10 @@ describe('User routing', function() {
                     should.exist(res.body.role);
                     should.exist(res.body.bio);
                     should.exist(res.body.tagline);
+                    should.exist(res.body.emailHash);
                     should.exist(res.body.featured);
+
+                    res.body.emailHash.should.equal(MD5(user.email).toString());
 
                     done();
                 });
@@ -220,9 +226,52 @@ describe('User routing', function() {
                     should.exist(res.body[0].role);
                     should.exist(res.body[0].bio);
                     should.exist(res.body[0].tagline);
+                    should.exist(res.body[0].emailHash);
                     should.exist(res.body[0].featured);
 
                     done();
+                });
+            });
+        });
+        it('should respond to a query for featured users', function(done) {
+            var u = new User(user);
+            u.save(function(err) {
+                should.not.exist(err);
+
+                agent
+                .get('/api/v1/users/?featured=false')
+                .end(function(err, res) {
+
+                    should.exist(res.body[0].username);
+                    res.body[0].featured.should.equal(false);
+
+                    agent
+                    .get('/api/v1/users/?featured=true')
+                    .end(function(err, res) {
+                        res.body.length.should.equal(0);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should respond to a query for specific roles', function(done) {
+            var u = new User(user);
+            u.save(function(err) {
+                should.not.exist(err);
+
+                agent
+                .get('/api/v1/users/?role=Visitor')
+                .end(function(err, res) {
+
+                    should.exist(res.body[0].username);
+                    res.body[0].role.should.equal('Visitor');
+
+                    agent
+                    .get('/api/v1/users/?role=Administrator')
+                    .end(function(err, res) {
+                        res.body.length.should.equal(0);
+                        done();
+                    });
                 });
             });
         });
