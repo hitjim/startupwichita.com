@@ -23,6 +23,7 @@
             // Initialize the controller and a mock scope
             var EventsController,
                 scope,
+                Geocoder,
                 $httpBackend,
                 $stateParams,
                 $location;
@@ -33,9 +34,11 @@
             beforeEach(inject(function($controller, $rootScope, _$location_, _$stateParams_, _$httpBackend_) {
 
                 scope = $rootScope.$new();
+                //TODO - mock the Geocoder service
 
                 EventsController = $controller('EventsController', {
-                    $scope: scope
+                    $scope: scope,
+                    Geocoder: Geocoder
                 });
 
                 $stateParams = _$stateParams_;
@@ -58,7 +61,7 @@
                         address: '123 Mosely Dr Wichita, KS 67209',
                         author: 'Erik Rodriguez',
                         tags: ['Tag'],
-                        latlng: [0, 0]
+                        latlng: [37.6856246, -97.32717760000003]
                     }]);
 
                     // run controller
@@ -74,7 +77,7 @@
                         address: '123 Mosely Dr Wichita, KS 67209',
                         author: 'Erik Rodriguez',
                         tags: ['Tag'],
-                        latlng: [0, 0]
+                        latlng: [37.6856246, -97.32717760000003]
                     }]);
 
                 });
@@ -94,7 +97,7 @@
                             address: '123 Mosely Dr Wichita, KS 67209',
                             author: 'Erik Rodriguez',
                             tags: ['Tag'],
-                            latlng: [0, 0]
+                            latlng: [37.6856246, -97.32717760000003]
                         };
                     };
 
@@ -124,7 +127,7 @@
                             address: '123 Mosely Dr Wichita, KS 67209',
                             author: 'Erik Rodriguez',
                             tags: ['Tag'],
-                            latlng: [0, 0]
+                            latlng: [37.6856246, -97.32717760000003]
                         };
                     };
 
@@ -139,7 +142,7 @@
                             address: '123 Mosely Dr Wichita, KS 67209',
                             author: 'Erik Rodriguez',
                             tags: ['Tag'],
-                            latlng: [0, 0]
+                            latlng: [37.6856246, -97.32717760000003]
                         };
                     };
 
@@ -151,7 +154,7 @@
                     scope.address = '123 Mosely Dr Wichita, KS 67209';
                     scope.author = 'Erik Rodriguez';
                     scope.tags = ['Tag'];
-                    scope.latlng = [0, 0];
+                    scope.latlng = [37.6856246, -97.32717760000003];
 
                     // test post request is sent
                     $httpBackend.expectPOST('/api/v1/events', postEventData()).respond(responseEventData());
@@ -168,7 +171,7 @@
                     expect(scope.address).toEqual('');
                     expect(scope.author).toEqual('');
                     expect(scope.tags).toEqual('');
-                    expect(scope.latlng).toEqual('');
+                    expect(scope.latlng).toEqual(null);
 
                     // test URL location to new object
                     expect($location.path()).toBe('/api/v1/events/' + responseEventData()._id);

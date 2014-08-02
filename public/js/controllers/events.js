@@ -2,12 +2,13 @@
     'use strict';
 
     var EventsController = [
-        '$scope', '$stateParams', '$location', 'Global', 'Events',
-        function ($scope, $stateParams, $location, Global, Events) {
+        '$scope', '$stateParams', '$location', 'Global', 'Events', 'Geocoder',
+        function ($scope, $stateParams, $location, Global, Events, Geocoder) {
             $scope.global = Global;
 
             $scope.create = function() {
-                var event = new Events({
+
+                var eventData = {
                     title: this.title,
                     content: this.content,
                     startTime: this.startTime,
@@ -15,20 +16,37 @@
                     address: this.address,
                     author: this.author,
                     tags: this.tags,
-                    latlng: this.latlng
-                });
-                event.$save(function(response) {
-                    $location.path('/api/v1/events/' + response._id);
-                });
+                    latlng: null
+                };
 
-                this.title = '';
-                this.content = '';
-                this.startTime = '';
-                this.endTime = '';
-                this.address = '';
-                this.author = '';
-                this.tags = '';
-                this.latlng = '';
+                var saveEvent = function(data) {
+                    var event = new Events(data);
+                    event.$save(function(response) {
+                        $location.path('/api/v1/events/' + response._id);
+                    });
+
+                    $scope.title = '';
+                    $scope.content = '';
+                    $scope.startTime = '';
+                    $scope.endTime = '';
+                    $scope.address = '';
+                    $scope.author = '';
+                    $scope.tags = '';
+                    $scope.latlng = null;
+                };
+
+                if (this.address){
+                    Geocoder.latLngForAddress(this.address)
+                        .then(function(data) {
+                            if (data.hasOwnProperty('lat')){
+                                eventData.latlng = [data.lat, data.lng];
+                                console.log(eventData.latlng);
+                            }
+                            saveEvent(eventData);
+                        });
+                } else {
+                    saveEvent(eventData);
+                }
             };
 
             $scope.remove = function(event) {
